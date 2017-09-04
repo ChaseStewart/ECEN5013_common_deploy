@@ -41,11 +41,23 @@
     shell: "source /home/{{ username }}/.profile"
     args:
       executable: /bin/bash
+  
+  - name: create .vim colors folder if needed
+    file: 
+      path: "/home/{{ username }}/.vim/colors"
+      state: directory
 
-  - name: Create .vimrc file if needed
-    command: " touch /home/{{ username }}/.vimrc"
+  - name: get desert colorscheme
+    get_url:
+      url: https://raw.githubusercontent.com/fugalh/desert.vim/master/colors/desert.vim
+      dest: "/home/{{ username }}/.vim/colors/desert.vim"
+
+  - name: create .vimrc file if needed
+    file: 
+      path: "/home/{{ username }}/.vimrc"
+      state: touch
 
   - name: Set color in the .vimrc file
     lineinfile:
       path: "/home/{{ username }}/.vimrc"
-      line: "colo: desert"
+      line: "colorscheme desert"
