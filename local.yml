@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+  - name: install apt-get packages
+    apt:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+    - wget
+    - git
+    - make
+    - cmake
+    - gcc
+    - g++
+    - vim
+    - lsof
+    - gdb
+    - python-pip
+    - libncurses5-dev
+    - exuberant-ctags
+    - bc
+    - libssl-dev
+
+  - name: Add git repositories
+    git:
+      repo: "https://github.com/ChaseStewart/{{ item }}"
+      dest: "/home/{{ username }}/{{ item }}"
+      clone: yes
+      accept_hostkey: yes
+    with_items: 
+    - "ECEN5013-HW1"
+
+  - name: Add bin utils to PATH
+    lineinfile:
+      path: "/home/{{ username }}/.profile"
+      line: "PATH=\"/home/{{ username }}/ECEN5013-HW1/bin:$PATH\""
+
+  - name: Source the profile page
+    become: no
+    shell: "source /home/{{ username }}/.profile"
+    args:
+      executable: /bin/bash
+
+  - name: Create .vimrc file if needed
+    command: " touch /home/{{ username }}/.vimrc"
+
+  - name: Set color in the .vimrc file
+    lineinfile:
+      path: "/home/{{ username }}/.vimrc"
+      line: "colo: desert"
