@@ -33,7 +33,7 @@
 
   - name: Add bin utils to PATH
     lineinfile:
-      path: "/home/{{ username }}/.profile"
+      dest: "/home/{{ username }}/.profile"
       line: "PATH=\"/home/{{ username }}/ECEN5013-HW1/bin:$PATH\""
 
   - name: Source the profile page
@@ -44,10 +44,10 @@
 
   - name: create .vimrc file if needed
     file: 
-      path: "/home/{{ username }}/.vimrc"
+      dest: "/home/{{ username }}/.vimrc"
       state: touch
 
   - name: Set color in the .vimrc file
     lineinfile:
-      path: "/home/{{ username }}/.vimrc"
+      dest: "/home/{{ username }}/.vimrc"
       line: "colorscheme industry"
